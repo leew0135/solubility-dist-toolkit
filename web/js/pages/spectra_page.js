@@ -11,6 +11,8 @@
  *     - fit error (SSE) vs α                       figure key: sse_vs_alpha
  *   and a table of α for all conditions, CSV download and "Send α to ①".
  *   Python runs once per "Run"; the Vr buttons only switch what is drawn.
+ *   Picking an example here makes pages ① and ② load the same example (StepStore slot "example"),
+ *   and an example picked on ① or ② is loaded here when this tab is opened again.
  *
  * HOW TO CHANGE
  *   α grid step default            -> solubility_toolkit/config.py (ALPHA_GRID_STEP)
@@ -70,16 +72,33 @@ export default class SpectraPage extends BasePage {
         .filter(([k, ex]) => !k.startsWith("_") && ex.spectra)
         .map(([k, ex]) => `<option value="${k}">${ex.label}</option>`).join("");
       this.resetParameters();
+      const shared = steps.take("example");
+      this.seenExample = shared ? shared.sent : 0;
+      if (shared && examples[shared.data.key] && examples[shared.data.key].spectra) this.$("#s-example").value = shared.data.key;
       await this.loadExample(this.$("#s-example").value);
     } catch (err) {
       this.showError(err.message);
     }
   }
 
+  /** Tab opened again: load the example picked meanwhile on another page, if any. */
+  onShow() {
+    const msg = this.examples && steps.take("example", this.seenExample);
+    if (!msg) return;
+    this.seenExample = msg.sent;
+    const ex = this.examples[msg.data.key];
+    if (!ex || !ex.spectra || msg.data.key === this.exampleKey) return;
+    this.$("#s-example").value = msg.data.key;
+    this.loadExample(msg.data.key);
+  }
+
   // ------------------------------------------------------------ inputs
   bindEvents() {
     const $ = this.$;
-    $("#s-example").addEventListener("change", (e) => this.loadExample(e.target.value));
+    $("#s-example").addEventListener("change", (e) => {
+      this.seenExample = steps.send("example", { key: e.target.value });      // the other pages follow
+      this.loadExample(e.target.value);
+    });
     $("#s-run").addEventListener("click", () => this.run());
     $("#s-reset").addEventListener("click", () => { this.resetParameters(); this.run(); });
     $("#s-params").addEventListener("input", () => this.markStale());

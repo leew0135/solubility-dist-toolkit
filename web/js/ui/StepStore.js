@@ -13,6 +13,8 @@
  *
  * SLOTS IN USE
  *   "alpha"         ⓪ -> ①   { vr, alpha, source, example }   (example = key in examples.json, or null)
+ *   "example"       any page -> all pages   { key }   (key in examples.json; picking an example on
+ *                   one page makes the other pages load the same example when they are opened)
  *   "distribution"  ① -> ②   { log_kow, log_s, mass_fraction, sd, normalized, relation, source, example }
  *
  * HOW TO CHANGE
@@ -21,10 +23,13 @@
 const PREFIX = "solubility-toolkit:";
 
 class StepStore {
+  /** Store a message; returns its `sent` value (always larger than any earlier one). */
   send(slot, data) {
-    const msg = { sent: Date.now(), data };
+    this._last = Math.max(Date.now(), (this._last || 0) + 1);
+    const msg = { sent: this._last, data };
     this._memory = { ...(this._memory || {}), [slot]: msg };
     try { sessionStorage.setItem(PREFIX + slot, JSON.stringify(msg)); } catch (err) { /* private mode: memory only */ }
+    return msg.sent;
   }
 
   /** Latest message in the slot, or null if there is none newer than `after` (a `sent` value). */

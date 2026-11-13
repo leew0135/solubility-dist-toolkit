@@ -45,7 +45,7 @@ copy of the package (`web/py/solubility_toolkit.zip`), and `pytest` fails until 
 
 Browser checks (need `pip install playwright` and `playwright install chromium`):
 `python web/tests/check_engine.py`, `check_spectra.py`, `check_distribution.py`, `check_kohler.py`,
-`check_info.py`, `check_style.py`. Each prints PASS / FAIL lines.
+`check_info.py`, `check_style.py`, `check_sync.py`. Each prints PASS / FAIL lines.
 
 Deployment: `vercel.json` serves `web/` as a static site (no build step). Everything the site needs,
 including Pyodide, numpy, Plotly and KaTeX, is in `web/vendor/`.

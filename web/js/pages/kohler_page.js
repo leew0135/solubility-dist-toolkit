@@ -13,6 +13,9 @@
  *     - critical point, κ_CCN at the given supersaturations, composition used
  *   Python runs once per "Run" and returns the whole curve; moving the slider only
  *   redraws in the browser.
+ *   Examples are shared by all pages (StepStore slot "example"): picking one here makes ⓪ and ①
+ *   load it too, and one picked there is loaded here when this tab is opened. Whatever happened
+ *   last wins: a newer "Send distribution to ②" from ① replaces an older example choice, and the reverse.
  *
  *   "Sample shown" switches the model between the whole particle and the solutions derived
  *   from it: A0 (the WSOM = the bins) and A1A0 / O1A0 at a volume ratio (the bins times the
@@ -90,6 +93,7 @@ export default class KohlerPage extends BasePage {
     root.innerHTML = TEMPLATE;
     this.$ = (sel) => root.querySelector(sel);
     this.seenDistribution = 0;
+    this.seenExample = 0;
     this.result = null;
     this.index = 1;               // position of the slider marker on the wet-diameter grid
     this.labelMode = "log_S";     // bin labels in the bar charts: "log_S" or "log_Kow"
@@ -127,7 +131,7 @@ export default class KohlerPage extends BasePage {
         .map(([k, ex]) => `<option value="${k}">${ex.kohler.label}</option>`).join("");
       this.resetParameters();
       this.resetFitSettings();
-      if (!this.loadFromPreviousStep()) this.loadExample(this.$("#k-example").value);
+      this.syncWithOtherPages(true);
       await this.run();
     } catch (err) {
       this.showError(err.message);
@@ -135,14 +139,42 @@ export default class KohlerPage extends BasePage {
   }
 
   onShow() {
-    if (this.defaults && this.loadFromPreviousStep()) this.run();
+    if (this.defaults && this.syncWithOtherPages()) this.run();
+  }
+
+  /**
+   * Take over what another page did since this page last looked: an example picked there, or a
+   * distribution sent from ① — the newer of the two. first = true: building the page, so load
+   * something in any case. Returns true when the inputs changed.
+   */
+  syncWithOtherPages(first = false) {
+    const ex = steps.take("example", this.seenExample);
+    const step = steps.take("distribution", this.seenDistribution);
+    if (ex) this.seenExample = ex.sent;
+    if (step && (!ex || step.sent > ex.sent)) return this.loadFromPreviousStep();
+    if (step) this.seenDistribution = step.sent;                           // older than the example choice: superseded
+    const key = ex && this.examples[ex.data.key] && this.examples[ex.data.key].kohler ? ex.data.key : null;
+    const current = this.sourceKind === "example" ? this.$("#k-example").value : null;
+    if (key && (first || key !== current)) {
+      this.$("#k-example").value = key;
+      this.resetParameters();
+      this.loadExample(key);
+      return true;
+    }
+    if (first) this.loadExample(this.$("#k-example").value);
+    return first;
   }
 
   // ------------------------------------------------------------ inputs
   bindEvents() {
     const $ = this.$;
     $("#k-add").addEventListener("click", () => this.table.addRow());
-    $("#k-example").addEventListener("change", (e) => { this.resetParameters(); this.loadExample(e.target.value); this.run(); });
+    $("#k-example").addEventListener("change", (e) => {
+      this.seenExample = steps.send("example", { key: e.target.value });      // the other pages follow
+      this.resetParameters();
+      this.loadExample(e.target.value);
+      this.run();
+    });
     $("#k-run").addEventListener("click", () => this.run());
     $("#k-reset").addEventListener("click", () => {
       this.resetParameters();

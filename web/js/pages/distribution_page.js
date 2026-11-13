@@ -12,6 +12,9 @@
  *         check: does the result reproduce α?      figure key: alpha_fit
  *         Monte Carlo spread per bin               figure key: mc_histograms
  *   Python runs once per "Run"; the axis switch only relabels the figure in the browser.
+ *   Examples are shared by all pages (StepStore slot "example"): picking one here makes ⓪ and ②
+ *   load it too, and one picked there is loaded here when this tab is opened. Whatever happened
+ *   last wins: a newer "Send α to ①" from ⓪ replaces an older example choice, and the reverse.
  *
  * HOW TO CHANGE
  *   Default numbers (iterations, ±10 %, noise, bin width, K_OW–S relations)
@@ -62,6 +65,7 @@ export default class DistributionPage extends BasePage {
     root.innerHTML = TEMPLATE;
     this.$ = (sel) => root.querySelector(sel);
     this.seenAlpha = 0;
+    this.seenExample = 0;
     this.result = null;
     this.histCards = [];
 
@@ -106,7 +110,7 @@ export default class DistributionPage extends BasePage {
       this.fillRelationMenu();
       this.fillExampleMenu();
       this.resetParameters();
-      if (!this.loadFromPreviousStep()) this.loadExample(this.$("#d-example").value);
+      this.syncWithOtherPages(true);
       await this.run();
     } catch (err) {
       this.showError(err.message);
@@ -114,14 +118,40 @@ export default class DistributionPage extends BasePage {
   }
 
   onShow() {
-    if (this.defaults && this.loadFromPreviousStep()) this.run();
+    if (this.defaults && this.syncWithOtherPages()) this.run();
+  }
+
+  /**
+   * Take over what another page did since this page last looked: an example picked there, or α sent
+   * from ⓪ — the newer of the two. first = true: building the page, so load something in any case.
+   * Returns true when the inputs changed.
+   */
+  syncWithOtherPages(first = false) {
+    const ex = steps.take("example", this.seenExample);
+    const step = steps.take("alpha", this.seenAlpha);
+    if (ex) this.seenExample = ex.sent;
+    if (step && (!ex || step.sent > ex.sent)) return this.loadFromPreviousStep();
+    if (step) this.seenAlpha = step.sent;                                  // older than the example choice: superseded
+    const key = ex && this.examples[ex.data.key] && this.examples[ex.data.key].alpha ? ex.data.key : null;
+    const current = this.sourceKind === "example" ? this.$("#d-example").value : null;
+    if (key && (first || key !== current)) {
+      this.$("#d-example").value = key;
+      this.loadExample(key);
+      return true;
+    }
+    if (first) this.loadExample(this.$("#d-example").value);
+    return first;
   }
 
   // ------------------------------------------------------------ inputs
   bindEvents() {
     const $ = this.$;
     $("#d-add").addEventListener("click", () => this.table.addRow());
-    $("#d-example").addEventListener("change", (e) => { this.loadExample(e.target.value); this.run(); });
+    $("#d-example").addEventListener("change", (e) => {
+      this.seenExample = steps.send("example", { key: e.target.value });      // the other pages follow
+      this.loadExample(e.target.value);
+      this.run();
+    });
     $("#d-run").addEventListener("click", () => this.run());
     $("#d-reset").addEventListener("click", () => { this.resetParameters(true); this.run(); });
     $("#d-relation").addEventListener("change", (e) => this.pickRelation(e.target.value));

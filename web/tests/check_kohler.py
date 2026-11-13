@@ -228,6 +228,7 @@ def main(shots):
             check("wrong file explained", "needs the columns log_S and mass_fraction" in page.inner_text("#k-error"), page.inner_text("#k-error")[:90])
 
             # 9. chain: ① sends its distribution, ② fills density and κ_intr from the example and runs
+            #    (① shows peat: the example last picked on this page is shared with the other pages)
             page.click('a[data-route="distribution"]')
             page.wait_for_selector('[data-page="distribution"][data-state="done"]', timeout=120_000)
             page.click("#d-send")
@@ -236,7 +237,8 @@ def main(shots):
             wait_done(page)
             sc = results(page)[0]
             check("distribution from ① arrives and runs", "filled from the example" in page.inner_text("#k-source")
-                  and page.locator("#k-table tbody tr").count() == 4 and sc.startswith("1.003"), f"{sc}; {page.inner_text('#k-source')[:60]}")
+                  and page.locator("#k-table tbody tr").count() == 5 and page.input_value("#k-example") == "peat"
+                  and sc.startswith("1.003"), f"{sc}; {page.inner_text('#k-source')[:60]}")
 
             # 10. phone width
             page.set_viewport_size({"width": 390, "height": 800})
