@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solubility-toolkit"
+version = "0.1.0"
+description = "Solubility distributions of organic matter from 1-octanol-water partitioning, with Köhler theory"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["numpy"]
+
+[project.optional-dependencies]
+test = ["pytest", "scipy"]
+
+[tool.setuptools]
+packages = ["solubility_toolkit"]

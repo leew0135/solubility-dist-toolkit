@@ -1,0 +1,27 @@
+<!doctype html>
+<!--
+  index.html — the single page of the website.
+
+  All tabs live in this one page (addresses like #/spectra, #/distribution), so the
+  Python engine is loaded once and stays alive when you switch tabs.
+  Nothing to edit here normally:
+    pages and titles -> js/config.js      look -> styles/site.css, styles/figure_styles.js
+  To preview on your computer:  python scripts/build_web.py --serve
+  (opening this file by double-click does not work: browsers block modules on file://)
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solubility Distribution Toolkit</title>
+<link rel="stylesheet" href="styles/site.css">
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+<script src="vendor/plotly/plotly.min.js" defer></script>
+<script src="vendor/katex/katex.min.js" defer></script>
+<script type="module" src="js/main.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<noscript>This toolkit needs JavaScript: all calculations run in your browser.</noscript>
+</body>
+</html>

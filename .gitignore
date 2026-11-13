@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.venv/
+venv/
+
+# editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Vercel
+.vercel/
+
+# NOT ignored on purpose:
+#   web/vendor/                     Pyodide, numpy, Plotly, KaTeX: the website runs without any outside server
+#   web/py/solubility_toolkit.zip   made by scripts/build_web.py; tests/test_web_build.py checks it is up to date

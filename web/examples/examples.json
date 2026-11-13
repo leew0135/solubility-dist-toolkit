@@ -1,0 +1,595 @@
+{
+  "_about": "Example data offered in the 'load example' menus. Add an entry here to add an example. alpha = input of page ① (uncertainty_pct optional, one value per Vr); spectra = input of page ⓪ (file made by scripts/make_web_examples.py); kohler = input of page ② (one value per bin; WIOM / AS as volume fractions). Values and sources: data/README_NGO.md, data/kohler_params.json, data/alpha_pinene/README_AP.md.",
+  "alpha_pinene": {
+    "label": "α-pinene SOM — 4 conditions (Lee et al., 2023)",
+    "available": true,
+    "alpha": {
+      "vr": [
+        1.78,
+        0.32,
+        0.06,
+        0.01
+      ],
+      "value": [
+        0.44,
+        0.55,
+        0.66,
+        0.77
+      ]
+    },
+    "bin_centers": [
+      -1,
+      0,
+      1,
+      2
+    ],
+    "spectra": {
+      "file": "examples/alpha_pinene_spectra.csv",
+      "note": "O₁A₀ spectra after ME-2 removal of the octanol background (Lee et al., 2023, SI S1). Gives α = 0.44 / 0.55 / 0.66 / 0.77 as in the paper."
+    },
+    "kohler": {
+      "label": "α-pinene SOM, online particles (WSOM + 7 % WIOM)",
+      "log_kow": [
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mass_fraction": [
+        0.475017629,
+        0.088952705,
+        0.109490529,
+        0.223205736
+      ],
+      "density": [
+        1.393064595,
+        1.146406521,
+        1.146406521,
+        1.146406521
+      ],
+      "o_c": [
+        0.6604,
+        0.321,
+        0.321,
+        0.321
+      ],
+      "h_c": [
+        1.5082,
+        1.6027,
+        1.6027,
+        1.6027
+      ],
+      "kappa_intr": [
+        0.2,
+        0.067818182,
+        0.078545455,
+        0.108909091
+      ],
+      "wiom_fraction": 0.07,
+      "wiom_kappa": 0.137090909,
+      "ss_percent": [
+        0.351718437,
+        0.4806735,
+        0.603655162,
+        0.771566928
+      ],
+      "note": "Distribution of A₀ (MATLAB Monte Carlo mean), bin densities from the ME-2 factors, κ_intr fitted in Lee et al. (2023). Measured κ_CCN in the fit section: Lee et al. (2023), SI Table S4.",
+      "measured": [
+        {
+          "type": "particle",
+          "ss_percent": [
+            0.351718437,
+            0.4806735,
+            0.603655162,
+            0.771566928
+          ],
+          "kappa": [
+            0.12,
+            0.12,
+            0.11,
+            0.1
+          ]
+        },
+        {
+          "type": "A0",
+          "ss_percent": [
+            0.329479,
+            0.458184,
+            0.586997,
+            0.769875
+          ],
+          "kappa": [
+            0.13,
+            0.13,
+            0.13,
+            0.13
+          ]
+        },
+        {
+          "type": "A1A0",
+          "vr": 1.78,
+          "ss_percent": [
+            0.329479,
+            0.458184,
+            0.586997,
+            0.769875
+          ],
+          "kappa": [
+            0.21,
+            0.22,
+            0.21,
+            0.2
+          ]
+        },
+        {
+          "type": "A1A0",
+          "vr": 0.32,
+          "ss_percent": [
+            0.329479,
+            0.458184,
+            0.586997,
+            0.769875
+          ],
+          "kappa": [
+            0.17,
+            0.17,
+            0.17,
+            0.17
+          ]
+        },
+        {
+          "type": "A1A0",
+          "vr": 0.06,
+          "ss_percent": [
+            0.329479,
+            0.458184,
+            0.586997,
+            0.769875
+          ],
+          "kappa": [
+            0.13,
+            0.13,
+            0.13,
+            0.13
+          ]
+        }
+      ]
+    }
+  },
+  "mosquito_coil": {
+    "label": "Mosquito coil — 5 conditions (Lee et al., 2022)",
+    "available": true,
+    "alpha": {
+      "vr": [
+        10,
+        5,
+        1,
+        0.1,
+        0.01
+      ],
+      "value": [
+        0.52,
+        0.57,
+        0.71,
+        0.925,
+        0.94
+      ],
+      "uncertainty_pct": [
+        9.6,
+        10.5,
+        9.9,
+        7.0,
+        5.3
+      ]
+    },
+    "bin_centers": [
+      -2,
+      -1,
+      0,
+      1,
+      2
+    ],
+    "note": "α and ± % = midpoint and half-width of the α ranges used in the paper (47–57, 51–63, 64–78, 86–99, 89–99 %).",
+    "spectra": {
+      "file": "examples/mosquito_coil_spectra.csv",
+      "note": "m/z ≥ 41; O₁A₀ = octanol-removed PMF factor. This gives α = 0.48 / 0.56 / 0.72 / 0.94 / 1.00; the paper used α from another reconstruction (ranges 47–57 … 89–99 %, the example on page ①)."
+    },
+    "kohler": {
+      "label": "Mosquito coil WSOM (A₀)",
+      "log_kow": [
+        -2,
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mass_fraction": [
+        0.47642,
+        0.0930231,
+        0.336375,
+        0.0551896,
+        0.0118757
+      ],
+      "density": [
+        1.269079137,
+        1.269079137,
+        1.190817489,
+        1.033046856,
+        1.033046856
+      ],
+      "o_c": [
+        0.64,
+        0.64,
+        0.25,
+        0.18,
+        0.18
+      ],
+      "h_c": [
+        1.86,
+        1.86,
+        1.3,
+        1.66,
+        1.66
+      ],
+      "kappa_intr": [
+        0.19,
+        0.12484375,
+        0.06234375,
+        0.11234375,
+        0.160625
+      ],
+      "wiom_fraction": 0,
+      "wiom_kappa": 0,
+      "temperature": 298.15,
+      "ss_percent": [
+        0.110455,
+        0.228214,
+        0.403249,
+        0.963161
+      ],
+      "note": "Distribution of A₀, bin densities from the PMF factors, κ_intr fitted in Lee et al. (2022). The fit section here uses the measured κ_CCN only (not the sub-saturated HTDMA data), so it need not return the same κ_intr.",
+      "measured": [
+        {
+          "type": "A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.144063,
+            0.127999,
+            0.141174,
+            0.161961
+          ]
+        },
+        {
+          "type": "A1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.241149,
+            0.255552,
+            0.261758,
+            0.281688
+          ],
+          "vr": 10.0
+        },
+        {
+          "type": "A1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.278772,
+            0.240799,
+            0.253145,
+            0.269493
+          ],
+          "vr": 5.0
+        },
+        {
+          "type": "A1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.229148,
+            0.209645,
+            0.218738,
+            0.237696
+          ],
+          "vr": 1.0
+        },
+        {
+          "type": "A1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.191439,
+            0.166454,
+            0.171481,
+            0.192369
+          ],
+          "vr": 0.1
+        },
+        {
+          "type": "A1A0",
+          "ss_percent": [
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.150459,
+            0.154549,
+            0.174274
+          ],
+          "vr": 0.01
+        },
+        {
+          "type": "O1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.0909062,
+            0.094273,
+            0.102949,
+            0.116801
+          ],
+          "vr": 0.1
+        },
+        {
+          "type": "O1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.0678544,
+            0.0734702,
+            0.0829619,
+            0.0981021
+          ],
+          "vr": 0.01
+        }
+      ]
+    }
+  },
+  "peat": {
+    "label": "Peat — 5 conditions (Lee et al., 2022)",
+    "available": true,
+    "alpha": {
+      "vr": [
+        10,
+        5,
+        1,
+        0.1,
+        0.01
+      ],
+      "value": [
+        0.37,
+        0.42,
+        0.51,
+        0.61,
+        0.79
+      ],
+      "uncertainty_pct": [
+        2.7,
+        2.4,
+        2.0,
+        1.6,
+        1.3
+      ]
+    },
+    "bin_centers": [
+      -2,
+      -1,
+      0,
+      1,
+      2
+    ],
+    "note": "α and ± % = midpoint and half-width of the α ranges used in the paper (36–38, 41–43, 50–52, 60–62, 78–80 %).",
+    "spectra": {
+      "file": "examples/peat_spectra.csv",
+      "note": "m/z ≥ 41; O₁A₀ = average spectrum. This gives α = 0.50 / 0.44 / 0.52 / 0.62 / 0.80; the paper used 0.37 at Vr 10 (source of that value not identified), the others agree."
+    },
+    "kohler": {
+      "label": "Peat WSOM (A₀)",
+      "log_kow": [
+        -2,
+        -1,
+        0,
+        1,
+        2
+      ],
+      "mass_fraction": [
+        0.293024421,
+        0.206982255,
+        0.061283878,
+        0.04922871,
+        0.389480737
+      ],
+      "density": [
+        1.556578661,
+        1.556578661,
+        1.556578661,
+        1.556578661,
+        0.992526737
+      ],
+      "o_c": [
+        0.97,
+        0.97,
+        0.97,
+        0.97,
+        0.13
+      ],
+      "h_c": [
+        1.52,
+        1.52,
+        1.52,
+        1.52,
+        1.67
+      ],
+      "kappa_intr": [
+        0.314179104,
+        0.254477612,
+        0.250298507,
+        0.213731343,
+        0.191044776
+      ],
+      "wiom_fraction": 0,
+      "wiom_kappa": 0,
+      "temperature": 298.15,
+      "ss_percent": [
+        0.110455,
+        0.228214,
+        0.403249,
+        0.963161
+      ],
+      "note": "Distribution of A₀, bin densities from the PMF factors, κ_intr fitted in Lee et al. (2022). The fit section here uses the measured κ_CCN only (not the sub-saturated HTDMA data), so it need not return the same κ_intr.",
+      "measured": [
+        {
+          "type": "A0",
+          "ss_percent": [
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.235122,
+            0.248151,
+            0.27308
+          ]
+        },
+        {
+          "type": "A1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.405158,
+            0.362084,
+            0.365882,
+            0.381744
+          ],
+          "vr": 10.0
+        },
+        {
+          "type": "A1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.374244,
+            0.335056,
+            0.344573,
+            0.368911
+          ],
+          "vr": 5.0
+        },
+        {
+          "type": "A1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.366547,
+            0.32359,
+            0.331773,
+            0.348433
+          ],
+          "vr": 1.0
+        },
+        {
+          "type": "A1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.358529,
+            0.294758,
+            0.296934,
+            0.309588
+          ],
+          "vr": 0.1
+        },
+        {
+          "type": "A1A0",
+          "ss_percent": [
+            0.110455,
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.260422,
+            0.264197,
+            0.267715,
+            0.294108
+          ],
+          "vr": 0.01
+        },
+        {
+          "type": "O1A0",
+          "ss_percent": [
+            0.228214,
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.0156668,
+            0.0169893,
+            0.0184411
+          ],
+          "vr": 0.1
+        },
+        {
+          "type": "O1A0",
+          "ss_percent": [
+            0.403249,
+            0.963161
+          ],
+          "kappa": [
+            0.0132346,
+            0.00708033
+          ],
+          "vr": 0.01
+        }
+      ]
+    }
+  }
+}

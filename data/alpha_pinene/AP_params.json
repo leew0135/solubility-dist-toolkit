@@ -1,0 +1,83 @@
+{
+ "source": "Dropbox /Backup/PKU DATA (D) backup 20211206/2017_Stephen_analysis_redo/ToDo_high_conc.xlsx",
+ "alpha": {
+  "Vr": [
+   1.78,
+   0.32,
+   0.06,
+   0.01
+  ],
+  "value": [
+   0.44,
+   0.55,
+   0.66,
+   0.77
+  ],
+  "MC_range_pct": [
+   [
+    40,
+    48
+   ],
+   [
+    50,
+    61
+   ],
+   [
+    59,
+    73
+   ],
+   [
+    69,
+    85
+   ]
+  ],
+  "method": "grid search (step 0.01) minimising sum over all m/z of (alpha*A1A0+(1-alpha)*O1A0_ME2 - A0)^2, normalised UMR spectra; range = ±10%"
+ },
+ "elemental_ratios_solutions": {
+  "SOM_online": [
+   0.393,
+   1.64
+  ],
+  "MSOM": [
+   0.439,
+   1.597
+  ],
+  "A0": [
+   0.431,
+   1.565
+  ],
+  "A1A0[1.78]": [
+   0.546,
+   1.546
+  ],
+  "A1A0[0.32]": [
+   0.517,
+   1.531
+  ],
+  "A1A0[0.06]": [
+   0.485,
+   1.561
+  ],
+  "A1A0[0.01]": [
+   0.473,
+   1.574
+  ],
+  "_columns": [
+   "O/C",
+   "H/C"
+  ]
+ },
+ "ME2_factors": {
+  "Factor2_high_OC": {
+   "O/C": 0.6604,
+   "H/C": 1.5082,
+   "density_g_cm3": 1.3931
+  },
+  "Factor3_low_OC": {
+   "O/C": 0.321,
+   "H/C": 1.6027,
+   "density_g_cm3": 1.1464
+  },
+  "method": "O2C_PMF_20221102.m: factor O/C, H/C fitted so that factor-fraction-weighted sums reproduce measured A1A0[Vr] and A0 elemental ratios; density from Kuwata et al. 2012"
+ }
+}
