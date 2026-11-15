@@ -121,6 +121,11 @@ def main(shots):
             page.click("#k-rho")
             check("typed densities kept when switching back", page.input_value('#k-table tbody tr:first-child input[data-key="rho"]') == "1.393064595")
 
+            ticks = page.locator("#k-bars .ytick text").evaluate_all("els => els.map((e) => e.textContent)")
+            check("bar charts name WIOM with its log S", ticks.count("WIOM (log S = −6)") == 2, str(ticks[-3:]))
+            if shots:
+                page.locator("#k-bars").screenshot(path=str(shots / "kohler_bars.png"))
+
             # 5b. sub-sample: A1A0 at Vr 1.78 reproduces the Excel κ (tests/test_against_paper.py)
             options = page.locator("#k-sample option").all_inner_texts()
             check("sample menu lists the fractions", len(options) == 5 and "A1A0 [Vr 1.78]" in options, str(options))

@@ -592,7 +592,7 @@ export default class KohlerPage extends BasePage {
 
   binLabel(c) {
     if (c.kind === "AS") return "(NH₄)₂SO₄";
-    if (c.kind === "WIOM") return "WIOM";
+    if (c.kind === "WIOM") return `WIOM (log S = ${signed(c.log_s)})`;   // log S from config.py (WIOM_LOG_S)
     return this.labelMode === "log_S" ? `log S = ${signed(c.log_s)}` : `log K<sub>OW</sub> = ${signed(c.log_kow)}`;
   }
 
