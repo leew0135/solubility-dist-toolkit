@@ -21,6 +21,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from check_distribution import RESULT_ROWS_JS  # noqa: E402
 from check_engine import BASE, ROOT, start_server   # noqa: E402
 
 sys.path.insert(0, str(ROOT))
@@ -153,7 +154,7 @@ def main(shots):
             sent = [(rows.nth(i).locator('input[data-key="vr"]').input_value(), rows.nth(i).locator('input[data-key="alpha"]').input_value()) for i in range(rows.count())]
             check("Send α to ①", sent == [("1.78", "0.44"), ("0.32", "0.55"), ("0.06", "0.66"), ("0.01", "0.77")]
                   and "Received α from ⓪" in page.inner_text("#d-source"), page.inner_text("#d-source"))
-            mean = [float(t) for t in page.locator("#d-result-table tbody tr td:nth-child(3)").all_inner_texts()]
+            mean = [float(row[2]) for row in page.evaluate(RESULT_ROWS_JS)]
             check("① inverted the received α", len(mean) == 4 and abs(mean[0] - 0.475) < 0.02, str(mean))
             if shots:
                 page.screenshot(path=str(shots / "spectra_to_distribution.png"))

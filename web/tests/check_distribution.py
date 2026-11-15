@@ -28,9 +28,14 @@ from solubility_toolkit import Inversion, Kernel    # noqa: E402
 VR, ALPHA, BINS = [1.78, 0.32, 0.06, 0.01], [0.44, 0.55, 0.66, 0.77], [-1, 0, 1, 2]
 
 
+# one list per bin, whichever way the results table is drawn (it turns sideways when too narrow)
+RESULT_ROWS_JS = """() => { const t = document.querySelector("#d-result-table table");
+      const lines = [...t.querySelectorAll("tbody tr")].map((tr) => [...tr.querySelectorAll("td")].map((td) => td.textContent));
+      return t.dataset.layout === "columns" ? lines[0].map((_, i) => lines.map((l) => l[i])) : lines; }"""
+
+
 def table_numbers(page):
-    rows = page.locator("#d-result-table tbody tr")
-    return [[float(t.replace("−", "-")) for t in rows.nth(i).locator("td").all_inner_texts()] for i in range(rows.count())]
+    return [[float(t.replace("−", "-")) for t in row] for row in page.evaluate(RESULT_ROWS_JS)]
 
 
 def wait_done(page):
@@ -160,9 +165,20 @@ def main(shots):
             page.wait_for_selector('[data-page="distribution"]:not([hidden])')
             check("page kept when returning", page.locator("#d-table tbody tr").count() == 5 and page.is_visible("#d-results"))
 
-            # 10. narrow screen
+            # 10. results table: one-line column titles, and it fits its box (turned sideways if needed)
+            fit_js = """() => { const box = document.querySelector('#d-result-table'), t = box.querySelector('table');
+                const ths = [...t.querySelectorAll('th')];
+                return { layout: t.dataset.layout, fits: t.scrollWidth <= box.clientWidth + 1,
+                         oneLine: ths.every((e) => getComputedStyle(e).whiteSpace === 'nowrap') }; }"""
+            wide = page.evaluate(fit_js)
+            check("results table: titles on one line, fits", wide["oneLine"] and wide["fits"], str(wide))
+
+            # 11. narrow screen
             page.set_viewport_size({"width": 390, "height": 800})
             page.wait_for_timeout(500)
+            narrow = page.evaluate(fit_js)
+            # with many bins it may still scroll sideways inside its own box; the page itself must not (next check)
+            check("results table turns sideways on a phone", narrow["layout"] == "columns" and len(table_numbers(page)) == 5, str(narrow))
             width = page.evaluate("document.documentElement.scrollWidth")
             check("fits a phone screen (no sideways scroll)", width <= 392, f"page width {width}px")
             if shots:

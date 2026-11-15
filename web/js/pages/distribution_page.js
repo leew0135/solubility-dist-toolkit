@@ -29,6 +29,7 @@
 import { BasePage } from "./BasePage.js";
 import { EditableTable } from "../ui/EditableTable.js";
 import { FigureCard } from "../ui/FigureCard.js";
+import { FlipTable } from "../ui/FlipTable.js";
 import { bindUpload, downloadText } from "../ui/CsvIO.js";
 import { steps } from "../ui/StepStore.js";
 import { SolubilityDistributionFigure } from "../plots/SolubilityDistributionFigure.js";
@@ -87,6 +88,9 @@ export default class DistributionPage extends BasePage {
       note: "f<sub>A</sub> = 1/(Vr·K<sub>OW</sub> + 1) for each volume ratio. Dashed lines: bin edges. A bin is well resolved when the curves differ inside it.",
       figure: PartitionKernelFigure, file: "partition_kernel",
     });
+    this.resultTable = new FlipTable(this.$("#d-result-table"), [
+      { label: "log K<sub>OW</sub>" }, { label: "log S (g cm⁻³)" }, { label: "Mean" }, { label: "SD" }, { label: "Normalized (→ ②)" },
+    ]);
     this.fitCard = new FigureCard(this.$("#d-fit"), {
       title: "",
       note: "A check of the result. Filled circles: the α you entered, with the uncertainty range used in the Monte Carlo. Open squares: the α that the retrieved distribution predicts at the same Vr, Σ<sub>j</sub> f̄<sub>A,j</sub>(Vr)·F<sub>j</sub>. If the squares fall inside the error bars, the distribution explains your measurements; if not, the chosen bins cannot describe the data (try other bin centres).",
@@ -354,9 +358,8 @@ export default class DistributionPage extends BasePage {
     this.fitCard.figure.render(r.alpha_fit);
     this.showHistograms(r);
 
-    $("#d-result-table tbody").innerHTML = r.table.map((row) => `<tr>
-      <td class="num">${signed(row.log_kow)}</td><td class="num">${signed(row.log_s)}</td>
-      <td class="num">${num(row.mean)}</td><td class="num">${num(row.sd)}</td><td class="num">${num(row.normalized)}</td></tr>`).join("");
+    this.resultTable.setRows(r.table.map((row) =>
+      [signed(row.log_kow), signed(row.log_s), num(row.mean), num(row.sd), num(row.normalized)]));
     $("#d-sum").innerHTML = `Σ mean = ${num(r.sum_mean)}. ${$("#d-normalize").checked
       ? "Normalized to 1 before ②." : "Sent to ② as it is (not normalized)."}
       The CSV also contains the single NNLS solution from the central α values. Computed in ${this.elapsed.toFixed(1)} s.`;
@@ -487,12 +490,7 @@ const TEMPLATE = `
       <div class="split-figure" id="d-dist"></div>
       <div class="card split-side">
         <div class="card-title">Results table</div>
-        <div class="table-scroll">
-          <table id="d-result-table">
-            <thead><tr><th class="num">log K<sub>OW</sub></th><th class="num">log S (g cm⁻³)</th><th class="num">Mean</th><th class="num">SD</th><th class="num">Normalized (→ ②)</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
+        <div id="d-result-table"></div>
         <div class="hint" id="d-sum"></div>
         <div class="row"><button class="btn btn-primary" type="button" id="d-send">Send distribution to ② →</button></div>
       </div>
