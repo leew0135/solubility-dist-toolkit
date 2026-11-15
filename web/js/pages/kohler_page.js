@@ -56,7 +56,7 @@ const EXAMPLES_URL = "examples/examples.json";
 const LIMITS = { dd_nm: [5, 2000], slider_steps: 1000, s_mark: 0.99, draws: [5, 2000], kappa_step: 0.01 };
 // The samples that can be modelled / measured. needsVr: defined by a volume ratio.
 const FRACTIONS = {
-  particle: { label: "Particle (online): WSOM + WIOM + (NH₄)₂SO₄", short: "Particle (online)", needsVr: false },
+  particle: { label: "Particle (online)", short: "Particle (online)", needsVr: false },
   A0: { label: "A0: WSOM (water extract)", short: "A0", needsVr: false },
   A1A0: { label: "A1A0 (aqueous phase at Vr)", short: "A1A0", needsVr: true },
   O1A0: { label: "O1A0 (octanol phase at Vr)", short: "O1A0", needsVr: true },
@@ -237,6 +237,13 @@ export default class KohlerPage extends BasePage {
     return cols;
   }
 
+  /** "Particle (online): WSOM + WIOM" — only the parts actually entered (WIOM and/or (NH₄)₂SO₄ > 0). */
+  particleLabel() {
+    const v = (id) => Number(this.$(id).value) || 0;
+    const parts = ["WSOM", ...(v("#k-wiom") > 0 ? ["WIOM"] : []), ...(v("#k-as") > 0 ? ["(NH₄)₂SO₄"] : [])];
+    return `${FRACTIONS.particle.label}: ${parts.join(" + ")}`;
+  }
+
   /** After WIOM / (NH₄)₂SO₄ changed: offer "Particle (online)" or not, in both menus. */
   refreshParticleOptions() {
     const want = this.hasNonWsom() || this.measured.rows.some((r) => r.type === "particle");   // never drop a row's choice
@@ -259,7 +266,8 @@ export default class KohlerPage extends BasePage {
       seen.add(`${r.type}${vr}`);
       options.push({ type: r.type, vr });
     }
-    menu.innerHTML = options.map((o) => `<option value='${JSON.stringify(o)}'>${FRACTIONS[o.type].needsVr ? fractionName(o) : FRACTIONS[o.type].label}</option>`).join("");
+    const label = (o) => (o.type === "particle" ? this.particleLabel() : FRACTIONS[o.type].needsVr ? fractionName(o) : FRACTIONS[o.type].label);
+    menu.innerHTML = options.map((o) => `<option value='${JSON.stringify(o)}'>${label(o)}</option>`).join("");
     if ([...menu.options].some((o) => o.value === keep)) menu.value = keep;
   }
 
@@ -875,7 +883,7 @@ const TEMPLATE = `
       <div class="fold-body stack">
         <div class="hint">Finds the κ<sub>intr</sub> of every bin (and of WIOM) that reproduces the κ<sub>CCN</sub> measured for several fractions of the same sample. Each round draws random κ<sub>intr</sub> sets, keeps those with Σ(κ<sub>meas</sub> − κ<sub>model</sub>)² below the tolerance, and narrows the range to their mean ± SD for the next round (Lee et al., 2022, 2023). The κ<sub>intr</sub> typed in the bin table are not used. Takes about a minute in a browser for 5 fractions (longer with more fractions or draws); the page stays usable and the fit can be cancelled.</div>
         <div id="k-measured"></div>
-        <div class="hint">One row per fraction. SS and κ: one κ for every supersaturation, separated by commas. Vr only for A1A0 and O1A0. “Particle (online)” = WSOM + the WIOM (and ammonium sulfate) fraction on the left; offered only when one of them is entered. A0, A1A0 and O1A0 are solutions of the WSOM bins only.</div>
+        <div class="hint">One row per fraction. SS and κ: one κ for every supersaturation, separated by commas. Vr only for A1A0 and O1A0. “Particle (online)” = WSOM + the WIOM and/or ammonium sulfate fraction entered on the left (the sample menu names the parts); offered only when one of them is entered. A0, A1A0 and O1A0 are solutions of the WSOM bins only.</div>
         <div class="row"><button class="btn" type="button" id="k-measured-add">+ Add fraction</button></div>
         <details>
           <summary>Fit settings</summary>
