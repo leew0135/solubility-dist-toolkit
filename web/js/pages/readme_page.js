@@ -153,7 +153,7 @@ export default class ReadmePage extends BasePage {
       ${eq("keff")}
       <p>Option “Full κ-Köhler” replaces the dilute-solution Raoult term by:</p>
       ${eq("kohlerFull")}
-      <p>The maximum of the curve is the critical saturation ratio ${i("s_c")}. The apparent ${i(R`\kccn`)}, as derived from CCN counter data, uses the surface tension of water ${i(R`\sigma_w`)} (Petters &amp; Kreidenweis, 2008); ${i("s_c(D_d)")} is computed for dry diameters ${dry[0]}–${dry[dry.length - 1]} nm and interpolated to the measured supersaturations.</p>
+      <p>The maximum of the curve is the critical saturation ratio ${i("s_c")}. The apparent ${i(R`\kccn`)}, as derived from CCN counter data, uses the surface tension of water ${i(R`\sigma_w`)} (Petters &amp; Kreidenweis, 2007); ${i("s_c(D_d)")} is computed for dry diameters ${dry[0]}–${dry[dry.length - 1]} nm and interpolated to the measured supersaturations.</p>
       ${eq("kccn")}
       <p>A particle is reported as two phases while more than 0.1 % of its dry volume is undissolved.</p>
 

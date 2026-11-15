@@ -19,11 +19,14 @@ const STATUS_TEXT = {
   error: "Python engine failed",
 };
 
+/** True when the site is opened from this computer (local preview, tests), not from the web. */
+const IS_LOCAL = ["localhost", "127.0.0.1", "[::1]", ""].includes(location.hostname);
+
 export class PageShell {
   constructor(root, { site, routes, defaultRoute, engine }) {
     this.root = root;
     this.site = site;
-    this.routes = routes;
+    this.routes = routes.filter((r) => !r.local_only || IS_LOCAL);   // author-only pages stay off the web
     this.defaultRoute = defaultRoute;
     this.engine = engine;
     this.pages = new Map();        // path -> page instance (kept alive)

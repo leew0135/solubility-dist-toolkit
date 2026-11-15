@@ -105,7 +105,7 @@ export function toEndNote(refs = REFERENCES) {
 }
 
 export function methodsText(site) {
-  return `Water-solubility distributions were retrieved from 1-octanol–water partitioning data (Kuwata and Lee, 2017) by non-negative least-squares inversion with Monte Carlo uncertainty estimation (Lee et al., 2020), using the ${site.title} v${site.version} (${site.url}).`;
+  return `Water-solubility distributions were retrieved from 1-octanol–water partitioning data (Kuwata and Lee, 2017) by non-negative least-squares inversion with Monte Carlo uncertainty estimation (Lee et al., 2020), using the ${site.title} v${site.version} (${site.url || location.origin + location.pathname}).`;
 }
 
 export function softwareText(site) {

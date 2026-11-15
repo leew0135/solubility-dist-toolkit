@@ -11,6 +11,9 @@
  *   - Add / rename / reorder a page                       -> ROUTES
  *       module = file in js/pages/ whose default export is the page class.
  *       kind: "tool" = numbered tab, "info" = button at the top right, "hidden" = no link.
+ *       local_only: true = the page opens only on your own computer
+ *       (python scripts/build_web.py --serve -> http://localhost:8000/#/style);
+ *       on the public website the address falls back to the first tool.
  *
  * Scientific defaults are NOT here: solubility_toolkit/config.py.
  * Figure styles are NOT here: styles/figure_styles.js.
@@ -19,9 +22,10 @@ export const SITE = {
   title: "Solubility Distribution Toolkit",
   subtitle: "1-octanol–water partitioning method · data inversion · Köhler theory",
   privacy_note: "All calculations run locally in your browser. No data is uploaded or stored.",
-  email: "[YOUR EMAIL]",                 // shown on the Read me page
+  email: "leew0135@ntu.edu.tw",          // shown on the Read me page
   github: "https://github.com/leew0135/solubility-dist-toolkit", // repository address (Read me, How to cite)
-  url: "[URL]",                          // address of this website, used in the suggested Methods text
+  url: "",                               // address of this website, used in the suggested Methods text;
+                                         // leave "" to use the address the page is opened from
   version: "0.1.0",                      // toolkit version shown on the pages (keep equal to solubility_toolkit.__version__)
   year: "2026",
   overview_image: "",                    // optional picture at the top of Read me, e.g. "images/overview.png"
@@ -41,7 +45,7 @@ export const ROUTES = [
   { path: "kohler",       kind: "tool",   label: "② Distribution → Köhler",       module: "kohler_page.js" },
   { path: "readme",       kind: "info",   label: "Read me",                       module: "readme_page.js" },
   { path: "cite",         kind: "info",   label: "How to cite",                   module: "cite_page.js" },
-  { path: "dev",          kind: "hidden", label: "Engine check",                  module: "dev_page.js" },
-  { path: "style",        kind: "hidden", label: "Figure styles (author tool)",   module: "style_page.js" },
+  { path: "dev",          kind: "hidden", label: "Engine check",                  module: "dev_page.js",   local_only: true },
+  { path: "style",        kind: "hidden", label: "Figure styles (author tool)",   module: "style_page.js", local_only: true },
 ];
 export const DEFAULT_ROUTE = "spectra";
