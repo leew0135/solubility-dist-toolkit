@@ -8,7 +8,8 @@ HOW TO USE (from the solubility-toolkit folder)
 WHAT IS CHECKED
     an example picked on ⓪ is loaded by ① and ② when they are opened; one picked on ② is loaded by
     ⓪ and ①; "Send α to ①" still wins when it is newer than the example choice; a page that already
-    shows the shared example is not run again.
+    shows the shared example is not run again; ⓪ → ① → ② by "Send" keeps the example's densities,
+    κ_intr and WIOM fraction on ②.
 
 HOW TO CHANGE
     What is checked -> the numbered blocks in main().  Server / browser start -> check_engine.py.
@@ -106,6 +107,18 @@ def main(shots):
             done(page, "distribution")
             check("newer example choice wins again (α-pinene)", page.input_value("#d-example") == "alpha_pinene"
                   and "α-pinene" in page.inner_text("#d-source"))
+
+            # 7. ⓪ → Send → ① → Send → ②: ② still knows the example (densities, κ_intr, 7 % WIOM)
+            open_tab(page, "spectra")
+            page.click("#s-send")
+            page.wait_for_function("document.querySelector('#d-source').textContent.includes('Received α from ⓪')", timeout=60_000)
+            done(page, "distribution")
+            page.click("#d-send")
+            page.wait_for_function("document.querySelector('#k-source').textContent.includes('Received distribution from ①')", timeout=60_000)
+            done(page, "kohler")
+            check("② keeps α-pinene WIOM after ⓪→①→②", page.input_value("#k-wiom") == "0.07"
+                  and "filled from the example" in page.inner_text("#k-source")
+                  and page.locator("#k-measured tbody tr").count() == 5, page.inner_text("#k-source")[:70])
 
             check("no browser errors", not errors, "; ".join(errors)[:300])
             browser.close()

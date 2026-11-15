@@ -247,6 +247,7 @@ export default class DistributionPage extends BasePage {
     }
     this.source = d.source || "step ⓪";
     this.sourceKind = "step";
+    this.stepExample = ex && ex.bin_centers ? d.example : null;   // ⓪ used an example: ② can still fill its densities, κ_intr, WIOM
     return true;
   }
 
@@ -413,7 +414,8 @@ export default class DistributionPage extends BasePage {
       mass_fraction: normalize ? r.normalized : r.mean,
       sd: normalize ? r.sd_normalized : r.sd,
       normalized: normalize, relation: r.relation, source: this.source || "",
-      example: this.sourceKind === "example" ? this.$("#d-example").value : null,
+      // which example the bins belong to, so ② can fill the densities, κ_intr and WIOM fraction
+      example: this.sourceKind === "example" ? this.$("#d-example").value : this.sourceKind === "step" ? this.stepExample : null,
     });
     location.hash = "#/kohler";
   }
